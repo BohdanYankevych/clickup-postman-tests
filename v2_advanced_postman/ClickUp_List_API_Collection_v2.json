@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "59f1d1fb-6d22-477a-99e1-12ed055cb039",
+		"name": "ClickUp List API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42858678"
+	},
+	"item": [
+		{
+			"name": "ClickUpUI",
+			"item": [
+				{
+					"name": "Create List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"List created successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    const response = pm.response.json();",
+									"    pm.environment.set(\"list_id\", response.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"random\", Math.floor(Math.random() * 10000));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "pk_36322639_60RWB6PAQGBFIY65N31OJJ70GTUDVV9P",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test List {{random}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/folder/{{folder_id}}/list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"folder",
+								"{{folder_id}}",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const schema = {",
+									"  \"type\": \"object\",",
+									"  \"required\": [\"id\", \"name\"],",
+									"  \"properties\": {",
+									"    \"id\": { \"type\": \"string\" },",
+									"    \"name\": { \"type\": \"string\" },",
+									"    \"status\": { \"type\": \"string\" }",
+									"  }",
+									"};",
+									"",
+									"pm.test(\"Response schema is valid\", function () {",
+									"  pm.response.to.have.status(200);",
+									"  pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+									"});",
+									"",
+									"const listId = pm.environment.get(\"pre_created_list_id\");",
+									"const token = pm.environment.get(\"token\").trim(); ",
+									"",
+									"pm.sendRequest({",
+									"  url: `https://api.clickup.com/api/v2/list/${listId}`,",
+									"  method: 'DELETE',",
+									"  header: {",
+									"    'Authorization': token",
+									"  }",
+									"}, function (err, res) {",
+									"  if (!err && res.code === 200) {",
+									"    console.log(\"Deleted Pre-Created List:\", listId);",
+									"  } else {",
+									"    console.log(\"Delete Failed:\", err || res.text());",
+									"  }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const folderId = pm.environment.get(\"folder_id\");",
+									"const token = pm.environment.get(\"token\").trim();",
+									"",
+									"pm.sendRequest({",
+									"  url: `https://api.clickup.com/api/v2/folder/${folderId}/list`,",
+									"  method: 'POST',",
+									"  header: {",
+									"    'Authorization': token,",
+									"    'Content-Type': 'application/json'",
+									"  },",
+									"  body: {",
+									"    mode: 'raw',",
+									"    raw: JSON.stringify({",
+									"      name: `PreCreated List ${Date.now()}`",
+									"    })",
+									"  }",
+									"}, function (err, res) {",
+									"  if (!err && res.code === 200) {",
+									"    const data = res.json();",
+									"    console.log(\"Created Pre-List:\", data.id);",
+									"    pm.environment.set(\"pre_created_list_id\", data.id);",
+									"  } else {",
+									"    console.log(\"Pre-Create Failed:\", err || res.text());",
+									"  }",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "pk_36322639_60RWB6PAQGBFIY65N31OJJ70GTUDVV9P",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Lists in Folder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Print all List IDs\", function () {",
+									"  const lists = pm.response.json().lists;",
+									"  console.log(\"List IDs:\");",
+									"  lists.forEach(item => console.log(\" - \", item.id));",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "pk_36322639_60RWB6PAQGBFIY65N31OJJ70GTUDVV9P",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/folder/{{folder_id}}/list",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"folder",
+								"{{folder_id}}",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"List updated successfully\", function () {",
+									"    pm.response.to.have.status(200);",
+									"    ",
+									"    const expectedName = \"Test List Updated \" + pm.variables.get(\"rand_suffix\");",
+									"    pm.expect(pm.response.json().name).to.eql(expectedName);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.variables.set(\"rand_suffix\", Math.floor(Math.random() * 100000));",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "pk_36322639_60RWB6PAQGBFIY65N31OJJ70GTUDVV9P",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Test List Updated {{rand_suffix}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Negative Test (Invalid Token)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Unauthorized access fails\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "{{invalid_token}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{invalid_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete List",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"List deleted successfully\", function () {",
+									"    pm.response.to.have.status(200); // or 204",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "pk_36322639_60RWB6PAQGBFIY65N31OJJ70GTUDVV9P",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/list/{{list_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"list",
+								"{{list_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "pk_36322639_60RWB6PAQGBFIY65N31OJJ70GTUDVV9P\n",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "token",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
