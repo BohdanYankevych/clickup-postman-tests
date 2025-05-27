@@ -1,0 +1,32 @@
+{
+  "name": "cypress-clickup-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "cy:open": "cypress open"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "Automated tests for ClickUp API using Cypress and TypeScript",
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "@stylistic/eslint-plugin": "^3.1.0",
+    "@stylistic/eslint-plugin-ts": "^3.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
+    "eslint": "^9.20.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-unicorn": "^56.0.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.24.0"
+  },
+  "keywords": [],
+  "dependencies": {
+    "cypress": "^14.4.0",
+    "dotenv": "^16.5.0"
+  }
+}
