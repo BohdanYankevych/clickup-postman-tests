@@ -1,0 +1,12 @@
+{
+  "lists": [
+    {
+      "id": 123,
+      "name": "ToDo"
+    },
+    {
+      "id": 456,
+      "name": "In Progress"
+    }
+  ]
+}
