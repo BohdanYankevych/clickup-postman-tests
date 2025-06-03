@@ -11,12 +11,14 @@ jobs:
           command: |
             python -m venv venv
             . venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
+            pip install -e .
       - run:
-          name: Run PyTest
+          name: Run pytest
           command: |
             . venv/bin/activate
-            pytest tests/
+            pytest --maxfail=1 --disable-warnings -q
 
 workflows:
   version: 2

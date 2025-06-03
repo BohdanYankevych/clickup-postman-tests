@@ -1,9 +1,9 @@
 setup.py
 clickup/__init__.py
+clickup/api_client.py
 clickup/config.py
 clickup_api_tests.egg-info/PKG-INFO
 clickup_api_tests.egg-info/SOURCES.txt
 clickup_api_tests.egg-info/dependency_links.txt
 clickup_api_tests.egg-info/top_level.txt
-tests/__init__.py
 tests/test_goals.py
