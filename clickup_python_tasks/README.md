@@ -1,6 +1,6 @@
-#  ClickUp Python Tasks
+# ClickUp Python Tasks
 
-##  Вміст
+## Вміст
 
 - `task1_arrays.py`: Робота з масивами і умовами
 - `task2_json_reader.py`: Читання ClickUp list.json і парсинг `lists`
