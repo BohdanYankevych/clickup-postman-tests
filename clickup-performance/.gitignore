@@ -1,0 +1,8 @@
+node_modules/
+*.log
+.npm/
+.env
+reports/*.json
+.DS_Store
+.vscode/
+.idea/
